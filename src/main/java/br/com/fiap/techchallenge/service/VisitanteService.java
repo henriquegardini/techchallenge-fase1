@@ -1,6 +1,6 @@
 package br.com.fiap.techchallenge.service;
 
-import br.com.fiap.techchallenge.controller.exception.ControllerNotFoundException;
+import br.com.fiap.techchallenge.exception.NtFoundException;
 import br.com.fiap.techchallenge.dto.VisitanteDTO;
 import br.com.fiap.techchallenge.entities.VisitanteEntity;
 import br.com.fiap.techchallenge.repository.VisitanteRepository;
@@ -27,7 +27,7 @@ public class VisitanteService {
 
     public VisitanteDTO findById(UUID id) {
         var visitante = visitanteRepository.findById(id).orElseThrow(()
-                -> new ControllerNotFoundException("Visitante não encontrado."));
+                -> new NtFoundException("Visitante não encontrado."));
         return toVisitanteDTO(visitante);
     }
 
@@ -46,7 +46,7 @@ public class VisitanteService {
             buscaProduto = visitanteRepository.save(buscaProduto);
             return toVisitanteDTO(buscaProduto);
         } catch (EntityNotFoundException e) {
-            throw new ControllerNotFoundException("Visitante não encontrado.");
+            throw new NtFoundException("Visitante não encontrado.");
         }
     }
 
