@@ -1,4 +1,4 @@
-package br.com.fiap.techchallenge.controller.exception;
+package br.com.fiap.techchallenge.exception;
 
 import java.util.ArrayList;
 import java.util.List;
