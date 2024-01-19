@@ -1,8 +1,9 @@
 package br.com.fiap.techchallenge.service;
 
-import br.com.fiap.techchallenge.exception.NtFoundException;
+import br.com.fiap.techchallenge.dto.VisitanteForm;
+import br.com.fiap.techchallenge.exception.NotFoundException;
 import br.com.fiap.techchallenge.dto.VisitanteDTO;
-import br.com.fiap.techchallenge.entities.VisitanteEntity;
+import br.com.fiap.techchallenge.entities.Visitante;
 import br.com.fiap.techchallenge.repository.VisitanteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,26 +28,26 @@ public class VisitanteService {
 
     public VisitanteDTO findById(UUID id) {
         var visitante = visitanteRepository.findById(id).orElseThrow(()
-                -> new NtFoundException("Visitante não encontrado."));
+                -> new NotFoundException("Visitante não encontrado."));
         return toVisitanteDTO(visitante);
     }
 
-    public VisitanteDTO save(VisitanteDTO visitanteDTO) {
-        VisitanteEntity visitanteEntity = toVisitanteEntity(visitanteDTO);
-        visitanteEntity = visitanteRepository.save(visitanteEntity);
-        return toVisitanteDTO(visitanteEntity);
+    public VisitanteDTO save(VisitanteForm visitanteForm) {
+        Visitante visitante = toVisitanteEntity(visitanteForm);
+        visitante = visitanteRepository.save(visitante);
+        return toVisitanteDTO(visitante);
     }
 
     public VisitanteDTO updateById(UUID id, VisitanteDTO visitanteDTO) {
         try {
-            VisitanteEntity buscaProduto = visitanteRepository.getReferenceById(id);
-            buscaProduto.setNome(visitanteDTO.nome());
-            buscaProduto.setDocumento(visitanteDTO.documento());
-            buscaProduto.setTelefone(visitanteDTO.telefone());
-            buscaProduto = visitanteRepository.save(buscaProduto);
-            return toVisitanteDTO(buscaProduto);
+            Visitante buscaVisitante = visitanteRepository.getReferenceById(id);
+            buscaVisitante.setNome(visitanteDTO.nome());
+            buscaVisitante.setDocumento(visitanteDTO.documento());
+            buscaVisitante.setTelefone(visitanteDTO.telefone());
+            buscaVisitante = visitanteRepository.save(buscaVisitante);
+            return toVisitanteDTO(buscaVisitante);
         } catch (EntityNotFoundException e) {
-            throw new NtFoundException("Visitante não encontrado.");
+            throw new NotFoundException("Visitante não encontrado.");
         }
     }
 
@@ -54,21 +55,23 @@ public class VisitanteService {
         visitanteRepository.deleteById(id);
     }
 
-    private VisitanteDTO toVisitanteDTO(VisitanteEntity visitanteEntity) {
+    private VisitanteDTO toVisitanteDTO(Visitante visitante) {
         return new VisitanteDTO(
-                visitanteEntity.getId(),
-                visitanteEntity.getNome(),
-                visitanteEntity.getDocumento(),
-                visitanteEntity.getTelefone()
+                visitante.getId(),
+                visitante.getNome(),
+                visitante.getDocumento(),
+                visitante.getTelefone()
         );
     }
 
-    private VisitanteEntity toVisitanteEntity(VisitanteDTO produtoDTO) {
-        return new VisitanteEntity(
-                produtoDTO.id(),
-                produtoDTO.nome(),
-                produtoDTO.documento(),
-                produtoDTO.telefone()
+    private Visitante toVisitanteEntity(VisitanteForm visitanteForm) {
+        Visitante visitante = new Visitante(
+                visitanteForm.getId(),
+                visitanteForm.getNome(),
+                visitanteForm.getDocumento(),
+                visitanteForm.getTelefone()
         );
+        visitante.setVisitas(visitanteForm.getVisitas());
+        return visitante;
     }
 }

@@ -2,36 +2,31 @@ package br.com.fiap.techchallenge.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "tb_visitante")
-public class VisitanteEntity {
+@Table(name = "visitante")
+public class Visitante {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
     private String nome;
     private String documento;
     private String telefone;
+    @OneToMany(mappedBy = "visitante", cascade = CascadeType.ALL)
+    private List<Visita> visitas = new ArrayList<>();
 
-    public VisitanteEntity() {
+    public Visitante() {
 
     }
 
-    public VisitanteEntity(UUID id, String nome, String documento, String telefone) {
-        this.id = id;
-        this.nome = nome;
-        this.documento = documento;
-        this.telefone = telefone;
-    }
-
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -59,22 +54,16 @@ public class VisitanteEntity {
         this.telefone = telefone;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        VisitanteEntity that = (VisitanteEntity) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public Visitante(Long id, String nome, String documento, String telefone) {
+        this.id = id;
+        this.nome = nome;
+        this.documento = documento;
+        this.telefone = telefone;
     }
 
     @Override
     public String toString() {
-        return "VisitanteEntity{" +
+        return "Visitante{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", documento='" + documento + '\'' +
@@ -82,4 +71,15 @@ public class VisitanteEntity {
                 '}';
     }
 
+    public void addVisita(Visita visita){
+        this.visitas.add(visita);
+    }
+
+    public void setVisitas(List<Visita> visitas) {
+        this.visitas = visitas;
+    }
+
+    public List<Visita> getVisitas() {
+        return visitas;
+    }
 }

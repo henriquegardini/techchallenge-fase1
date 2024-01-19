@@ -1,40 +1,43 @@
 package br.com.fiap.techchallenge.entities;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_visita")
-public class VisitaEntity {
+@Table(name = "visita")
+public class Visita {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
     private Integer numeroApartamento;
     private String nomeTorre;
+    @CreatedDate
     private LocalDate dataInclusao;
     private LocalDate dataExpiracao;
+    @ManyToOne
+    @JoinColumn(name = "visitante_id")
+    private Visitante visitante;
 
-    public VisitaEntity() {
-
-    }
-
-    public VisitaEntity(UUID id, Integer numeroApartamento, String nomeTorre, LocalDate dataInclusao, LocalDate dataExpiracao) {
+    public Visita(Long id, Integer numeroApartamento, String nomeTorre, LocalDate dataInclusao, LocalDate dataExpiracao) {
         this.id = id;
         this.numeroApartamento = numeroApartamento;
         this.nomeTorre = nomeTorre;
         this.dataInclusao = dataInclusao;
         this.dataExpiracao = dataExpiracao;
     }
+    public Visita() {
 
-    public UUID getId() {
+    }
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,23 +72,21 @@ public class VisitaEntity {
     public void setDataExpiracao(LocalDate dataExpiracao) {
         this.dataExpiracao = dataExpiracao;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        VisitaEntity that = (VisitaEntity) o;
-        return Objects.equals(id, that.id);
+        if (!(o instanceof Visita visita)) return false;
+        return getId().equals(visita.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId());
     }
 
     @Override
     public String toString() {
-        return "VisitaEntity{" +
+        return "Visita{" +
                 "id=" + id +
                 ", numeroApartamento=" + numeroApartamento +
                 ", nomeTorre='" + nomeTorre + '\'' +
@@ -93,5 +94,6 @@ public class VisitaEntity {
                 ", dataExpiracao=" + dataExpiracao +
                 '}';
     }
+
 
 }

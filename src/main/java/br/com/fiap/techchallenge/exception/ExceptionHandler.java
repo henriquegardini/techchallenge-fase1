@@ -14,8 +14,8 @@ public class ExceptionHandler {
 
     private StandardError error = new StandardError();
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(NtFoundException.class)
-    public ResponseEntity<StandardError> entityNotFound(NtFoundException e, HttpServletRequest request) {
+    @org.springframework.web.bind.annotation.ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<StandardError> entityNotFound(NotFoundException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         error.setTimestamp(Instant.now());
         error.setStatus(status.value());
