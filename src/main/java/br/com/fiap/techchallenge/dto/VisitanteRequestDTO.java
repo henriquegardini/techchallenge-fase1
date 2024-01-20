@@ -4,21 +4,11 @@ import br.com.fiap.techchallenge.entities.Visita;
 
 import java.util.List;
 
-public class VisitanteForm {
-
-    private Long id;
+public class VisitanteRequestDTO {
     private String nome;
     private String documento;
     private String telefone;
     private List<Visita> visitas;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNome() {
         return nome;

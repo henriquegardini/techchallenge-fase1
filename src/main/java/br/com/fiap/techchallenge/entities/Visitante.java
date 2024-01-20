@@ -61,6 +61,12 @@ public class Visitante {
         this.telefone = telefone;
     }
 
+    public Visitante(String nome, String documento, String telefone) {
+        this.nome = nome;
+        this.documento = documento;
+        this.telefone = telefone;
+    }
+
     @Override
     public String toString() {
         return "Visitante{" +
@@ -75,9 +81,6 @@ public class Visitante {
         this.visitas.add(visita);
     }
 
-    public void setVisitas(List<Visita> visitas) {
-        this.visitas = visitas;
-    }
 
     public List<Visita> getVisitas() {
         return visitas;

@@ -1,23 +1,28 @@
 package br.com.fiap.techchallenge.service;
 
-import br.com.fiap.techchallenge.dto.VisitanteForm;
-import br.com.fiap.techchallenge.exception.NotFoundException;
 import br.com.fiap.techchallenge.dto.VisitanteDTO;
+import br.com.fiap.techchallenge.dto.VisitanteRequestDTO;
 import br.com.fiap.techchallenge.entities.Visitante;
+import br.com.fiap.techchallenge.exception.NotFoundException;
 import br.com.fiap.techchallenge.repository.VisitanteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class VisitanteService {
 
+    private final VisitanteRepository visitanteRepository;
+    private final VisitaService visitaService;
+
     @Autowired
-    private VisitanteRepository visitanteRepository;
+    public VisitanteService(VisitanteRepository visitanteRepository, VisitaService visitaService) {
+        this.visitanteRepository = visitanteRepository;
+        this.visitaService = visitaService;
+    }
 
     public Collection<VisitanteDTO> findAll() {
         var visitantes = visitanteRepository.findAll();
@@ -26,19 +31,19 @@ public class VisitanteService {
                 .collect(Collectors.toList());
     }
 
-    public VisitanteDTO findById(UUID id) {
+    public VisitanteDTO findById(Long id) {
         var visitante = visitanteRepository.findById(id).orElseThrow(()
                 -> new NotFoundException("Visitante não encontrado."));
         return toVisitanteDTO(visitante);
     }
 
-    public VisitanteDTO save(VisitanteForm visitanteForm) {
-        Visitante visitante = toVisitanteEntity(visitanteForm);
+    public VisitanteDTO save(VisitanteRequestDTO visitanteRequestDTO) {
+        Visitante visitante = toVisitanteEntity(visitanteRequestDTO);
         visitante = visitanteRepository.save(visitante);
         return toVisitanteDTO(visitante);
     }
 
-    public VisitanteDTO updateById(UUID id, VisitanteDTO visitanteDTO) {
+    public VisitanteDTO updateById(Long id, VisitanteDTO visitanteDTO) {
         try {
             Visitante buscaVisitante = visitanteRepository.getReferenceById(id);
             buscaVisitante.setNome(visitanteDTO.nome());
@@ -51,7 +56,7 @@ public class VisitanteService {
         }
     }
 
-    public void deleteById(UUID id) {
+    public void deleteById(Long id) {
         visitanteRepository.deleteById(id);
     }
 
@@ -64,14 +69,15 @@ public class VisitanteService {
         );
     }
 
-    private Visitante toVisitanteEntity(VisitanteForm visitanteForm) {
+    private Visitante toVisitanteEntity(VisitanteRequestDTO visitanteRequestDTO) {
         Visitante visitante = new Visitante(
-                visitanteForm.getId(),
-                visitanteForm.getNome(),
-                visitanteForm.getDocumento(),
-                visitanteForm.getTelefone()
+                visitanteRequestDTO.getNome(),
+                visitanteRequestDTO.getDocumento(),
+                visitanteRequestDTO.getTelefone()
         );
-        visitante.setVisitas(visitanteForm.getVisitas());
+
+        visitanteRequestDTO.getVisitas().forEach(visitante::addVisita);
+
         return visitante;
     }
 }

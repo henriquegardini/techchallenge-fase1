@@ -5,7 +5,6 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Table(name = "visita")
