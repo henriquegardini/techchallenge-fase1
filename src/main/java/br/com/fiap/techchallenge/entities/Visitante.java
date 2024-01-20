@@ -54,6 +54,10 @@ public class Visitante {
         this.telefone = telefone;
     }
 
+    public void setVisitas(List<Visita> visitas) {
+        this.visitas = visitas;
+    }
+
     public Visitante(Long id, String nome, String documento, String telefone) {
         this.id = id;
         this.nome = nome;

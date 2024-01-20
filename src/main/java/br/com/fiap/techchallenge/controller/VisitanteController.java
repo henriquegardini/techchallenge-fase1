@@ -1,6 +1,5 @@
 package br.com.fiap.techchallenge.controller;
 
-import br.com.fiap.techchallenge.dto.VisitanteDTO;
 import br.com.fiap.techchallenge.dto.VisitanteRequestDTO;
 import br.com.fiap.techchallenge.service.VisitanteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,27 +17,27 @@ public class VisitanteController {
     private VisitanteService visitanteService;
 
     @GetMapping
-    public ResponseEntity<Collection<VisitanteDTO>> findAll() {
+    public ResponseEntity<Collection<VisitanteRequestDTO>> findAll() {
         var visitanteDTO = visitanteService.findAll();
         return ResponseEntity.ok(visitanteDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VisitanteDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<VisitanteRequestDTO> findById(@PathVariable Long id) {
         var visitanteDTO = visitanteService.findById(id);
         return ResponseEntity.ok(visitanteDTO);
     }
 
     @PostMapping
-    public ResponseEntity<VisitanteDTO> save(@RequestBody VisitanteRequestDTO visitanteRequestDTO) {
-        VisitanteDTO visitanteDto = visitanteService.save(visitanteRequestDTO);
+    public ResponseEntity<VisitanteRequestDTO> save(@RequestBody VisitanteRequestDTO visitanteRequestDTO) {
+        VisitanteRequestDTO visitanteDto = visitanteService.save(visitanteRequestDTO);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(visitanteDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VisitanteDTO> updateById(@PathVariable Long id, @RequestBody VisitanteDTO visitanteDTO) {
-        visitanteDTO = visitanteService.updateById(id, visitanteDTO);
-        return ResponseEntity.ok(visitanteDTO);
+    public ResponseEntity<VisitanteRequestDTO> updateById(@PathVariable Long id, @RequestBody VisitanteRequestDTO visitanteRequestDTO) {
+        visitanteRequestDTO = visitanteService.updateById(id, visitanteRequestDTO);
+        return ResponseEntity.ok(visitanteRequestDTO);
     }
 
     @DeleteMapping("/{id}")

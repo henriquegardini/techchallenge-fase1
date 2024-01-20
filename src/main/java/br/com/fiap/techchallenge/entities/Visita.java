@@ -13,21 +13,23 @@ public class Visita {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private Integer numeroApartamento;
-    private String nomeTorre;
+    private Integer apartamento;
+    private Integer andar;
+    private String torre;
     @CreatedDate
-    private LocalDate dataInclusao;
-    private LocalDate dataExpiracao;
+    private LocalDate inclusao;
+    private LocalDate expiracao;
     @ManyToOne
     @JoinColumn(name = "visitante_id")
     private Visitante visitante;
 
-    public Visita(Long id, Integer numeroApartamento, String nomeTorre, LocalDate dataInclusao, LocalDate dataExpiracao) {
+    public Visita(Long id, Integer apartamento, Integer andar, String torre, LocalDate inclusao, LocalDate expiracao) {
         this.id = id;
-        this.numeroApartamento = numeroApartamento;
-        this.nomeTorre = nomeTorre;
-        this.dataInclusao = dataInclusao;
-        this.dataExpiracao = dataExpiracao;
+        this.apartamento = apartamento;
+        this.andar = andar;
+        this.torre = torre;
+        this.inclusao = inclusao;
+        this.expiracao = expiracao;
     }
     public Visita() {
 
@@ -40,36 +42,44 @@ public class Visita {
         this.id = id;
     }
 
-    public Integer getNumeroApartamento() {
-        return numeroApartamento;
+    public Integer getApartamento() {
+        return apartamento;
     }
 
-    public void setNumeroApartamento(Integer numeroApartamento) {
-        this.numeroApartamento = numeroApartamento;
+    public void setApartamento(Integer apartamento) {
+        this.apartamento = apartamento;
     }
 
-    public String getNomeTorre() {
-        return nomeTorre;
+    public Integer getAndar() {
+        return andar;
     }
 
-    public void setNomeTorre(String nomeTorre) {
-        this.nomeTorre = nomeTorre;
+    public void setAndar(Integer andar) {
+        this.andar = andar;
     }
 
-    public LocalDate getDataInclusao() {
-        return dataInclusao;
+    public String getTorre() {
+        return torre;
     }
 
-    public void setDataInclusao(LocalDate dataInclusao) {
-        this.dataInclusao = dataInclusao;
+    public void setTorre(String torre) {
+        this.torre = torre;
     }
 
-    public LocalDate getDataExpiracao() {
-        return dataExpiracao;
+    public LocalDate getInclusao() {
+        return inclusao;
     }
 
-    public void setDataExpiracao(LocalDate dataExpiracao) {
-        this.dataExpiracao = dataExpiracao;
+    public void setInclusao(LocalDate inclusao) {
+        this.inclusao = inclusao;
+    }
+
+    public LocalDate getExpiracao() {
+        return expiracao;
+    }
+
+    public void setExpiracao(LocalDate expiracao) {
+        this.expiracao = expiracao;
     }
     @Override
     public boolean equals(Object o) {
@@ -87,10 +97,10 @@ public class Visita {
     public String toString() {
         return "Visita{" +
                 "id=" + id +
-                ", numeroApartamento=" + numeroApartamento +
-                ", nomeTorre='" + nomeTorre + '\'' +
-                ", dataInclusao=" + dataInclusao +
-                ", dataExpiracao=" + dataExpiracao +
+                ", apartamento=" + apartamento +
+                ", torre='" + torre + '\'' +
+                ", inclusao=" + inclusao +
+                ", expiracao=" + expiracao +
                 '}';
     }
 
