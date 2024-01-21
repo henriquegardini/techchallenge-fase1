@@ -1,0 +1,221 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-01-20T02:56:03.665Z",
+  "__export_source": "insomnia.desktop.app:v8.6.0",
+  "resources": [
+    {
+      "_id": "req_4f67c35ce1044a688cb9a22c8afa3a79",
+      "parentId": "fld_90760c59c7334876bf744c562dd8e12a",
+      "modified": 1705714764137,
+      "created": 1705541648459,
+      "url": "http://localhost:8080/visitantes",
+      "name": "Create save",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"nome\": \"João da Silva\",\n\t\"documento\": \"123.456.789-10\",\n\t\"telefone\": \"(11)98765-4321\",\n\t\"visitas\": [\n\t\t{\n\t\t\t\"apartamento\": 1,\n\t\t\t\"andar\": 1,\n\t\t\t\"torre\": \"A\",\n\t\t\t\"inclusao\": \"2024-01-01\",\n\t\t\t\"expiracao\": \"2024-02-01\"\n\t\t},\n\t\t{\n\t\t\t\"apartamento\": 2,\n\t\t\t\"andar\": 2,\n\t\t\t\"torre\": \"B\",\n\t\t\t\"inclusao\": \"2024-01-01\",\n\t\t\t\"expiracao\": \"2024-02-01\"\n\t\t}\n\n\t]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "User-Agent",
+          "value": "insomnia/8.5.1"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704238075458,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_90760c59c7334876bf744c562dd8e12a",
+      "parentId": "wrk_1fefbfd176a54152bd46d5ee657a7e55",
+      "modified": 1705541680695,
+      "created": 1705541648450,
+      "name": "Visitantes",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1704238053760,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_1fefbfd176a54152bd46d5ee657a7e55",
+      "parentId": null,
+      "modified": 1705541648435,
+      "created": 1705541648435,
+      "name": "techchallenge-fase1",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_64b29e7c0cab475fa5838e3b0602e1ec",
+      "parentId": "fld_90760c59c7334876bf744c562dd8e12a",
+      "modified": 1705541694953,
+      "created": 1705541648454,
+      "url": "http://localhost:8080/visitantes",
+      "name": "Read findAll",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "insomnia/8.5.1"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704238075358,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_ebde97fff1b34c1d91f759c2722148dd",
+      "parentId": "fld_90760c59c7334876bf744c562dd8e12a",
+      "modified": 1705718743571,
+      "created": 1705541648476,
+      "url": "http://localhost:8080/visitantes/1",
+      "name": "Read findById",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "insomnia/8.5.1"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704238075258,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_a202cb64622f4f0d862a12e5e776d03a",
+      "parentId": "fld_90760c59c7334876bf744c562dd8e12a",
+      "modified": 1705718761914,
+      "created": 1705541648464,
+      "url": "http://localhost:8080/visitantes/1",
+      "name": "Update updateById",
+      "description": "",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"nome\": \"João da Silva\",\n\t\"documento\": \"123.456.789-10\",\n\t\"telefone\": \"(11)98765-4322\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "User-Agent",
+          "value": "insomnia/8.5.1"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704238075158,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_c0b34b5ed1724847995127d4240751ba",
+      "parentId": "fld_90760c59c7334876bf744c562dd8e12a",
+      "modified": 1705719181187,
+      "created": 1705541648469,
+      "url": "http://localhost:8080/visitantes/1",
+      "name": "Delete deleteById",
+      "description": "",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "insomnia/8.5.1"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704238075058,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_e2e24e593d42470c8f2219abc77a9994",
+      "parentId": "wrk_1fefbfd176a54152bd46d5ee657a7e55",
+      "modified": 1705541648438,
+      "created": 1705541648438,
+      "name": "Base Environment",
+      "data": {},
+      "dataPropertyOrder": null,
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1703811813336,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_a1a57057355746d4a9caca0d4a123123",
+      "parentId": "wrk_1fefbfd176a54152bd46d5ee657a7e55",
+      "modified": 1705541648444,
+      "created": 1705541648444,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "spc_1cfc84084da04aa1a58b240060620de2",
+      "parentId": "wrk_1fefbfd176a54152bd46d5ee657a7e55",
+      "modified": 1705541648531,
+      "created": 1705541648529,
+      "fileName": "techchallenge-fase1",
+      "contents": "",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    }
+  ]
+}
