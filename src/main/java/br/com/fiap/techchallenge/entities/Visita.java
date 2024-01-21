@@ -1,6 +1,7 @@
 package br.com.fiap.techchallenge.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ public class Visita {
     private Integer apartamento;
     private Integer andar;
     private String torre;
-    @CreatedDate
+    @CreationTimestamp
     private LocalDate inclusao;
     private LocalDate expiracao;
     @ManyToOne
@@ -34,12 +35,16 @@ public class Visita {
     public Visita() {
 
     }
-    public Long getId() {
-        return id;
+
+    public Visita(Integer apartamento, Integer andar, String torre, LocalDate expiracao) {
+        this.apartamento = apartamento;
+        this.andar = andar;
+        this.torre = torre;
+        this.expiracao = expiracao;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     public Integer getApartamento() {
@@ -81,6 +86,8 @@ public class Visita {
     public void setExpiracao(LocalDate expiracao) {
         this.expiracao = expiracao;
     }
+
+    public void setVisitante(Visitante visitante) { this.visitante = visitante; }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

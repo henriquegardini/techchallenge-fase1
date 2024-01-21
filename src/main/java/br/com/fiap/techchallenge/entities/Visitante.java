@@ -15,7 +15,7 @@ public class Visitante {
     private String nome;
     private String documento;
     private String telefone;
-    @OneToMany(mappedBy = "visitante", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "visitante", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Visita> visitas = new ArrayList<>();
 
     public Visitante() {
@@ -24,10 +24,6 @@ public class Visitante {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -54,17 +50,6 @@ public class Visitante {
         this.telefone = telefone;
     }
 
-    public void setVisitas(List<Visita> visitas) {
-        this.visitas = visitas;
-    }
-
-    public Visitante(Long id, String nome, String documento, String telefone) {
-        this.id = id;
-        this.nome = nome;
-        this.documento = documento;
-        this.telefone = telefone;
-    }
-
     public Visitante(String nome, String documento, String telefone) {
         this.nome = nome;
         this.documento = documento;
@@ -83,10 +68,11 @@ public class Visitante {
 
     public void addVisita(Visita visita){
         this.visitas.add(visita);
+        visita.setVisitante(this);
     }
 
 
     public List<Visita> getVisitas() {
-        return visitas;
+        return this.visitas;
     }
 }

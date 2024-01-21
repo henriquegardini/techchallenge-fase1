@@ -1,86 +1,80 @@
 package br.com.fiap.techchallenge.service;
 
-import br.com.fiap.techchallenge.dto.VisitanteRequestDTO;
+import br.com.fiap.techchallenge.dto.visitante.VisitanteRequestDTO;
+import br.com.fiap.techchallenge.dto.visitante.VisitanteResponseDTO;
+import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateRequestDTO;
 import br.com.fiap.techchallenge.entities.Visitante;
+import br.com.fiap.techchallenge.exception.ConflictException;
+import br.com.fiap.techchallenge.exception.KeyMessages;
 import br.com.fiap.techchallenge.exception.NotFoundException;
-import br.com.fiap.techchallenge.repository.VisitaRepository;
+import br.com.fiap.techchallenge.mappers.visitante.VisitanteMapper;
 import br.com.fiap.techchallenge.repository.VisitanteRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.nonNull;
 
 @Service
 public class VisitanteService {
 
-    private final VisitanteRepository visitanteRepository;
+    private final VisitanteRepository repository;
     private final VisitaService visitaService;
 
     @Autowired
-    public VisitanteService(VisitanteRepository visitanteRepository, VisitaService visitaService) {
-        this.visitanteRepository = visitanteRepository;
+    public VisitanteService(final VisitanteRepository visitanteRepository, final VisitaService visitaService) {
+        this.repository = visitanteRepository;
         this.visitaService = visitaService;
     }
 
-    public Collection<VisitanteRequestDTO> findAll() {
-        var visitantes = visitanteRepository.findAll();
+    public List<VisitanteResponseDTO> findAll() {
+        final List<Visitante> visitantes = repository.findAll();
         return visitantes.stream()
-                .map(this::toVisitanteRequestDTO)
+                .map(VisitanteMapper::toVisitanteResponseDTO)
                 .collect(Collectors.toList());
+
     }
 
-    public VisitanteRequestDTO findById(Long id) {
-        var visitante = visitanteRepository.findById(id).orElseThrow(()
-                -> new NotFoundException("Visitante não encontrado."));
-        return toVisitanteRequestDTO(visitante);
+    public VisitanteResponseDTO findByDocumento(final String documento) {
+        final Visitante visitante = repository.findByDocumento(documento).orElseThrow(()
+                -> new NotFoundException(KeyMessages.VISITANTE_NOT_FOUND.getValue()));
+        return VisitanteMapper.toVisitanteResponseDTO(visitante);
     }
 
-    public VisitanteRequestDTO save(VisitanteRequestDTO visitanteRequestDTO) {
-        Visitante visitante = toVisitanteEntity(visitanteRequestDTO);
-        visitante = visitanteRepository.save(visitante);
-        visitaService.saveVisitas(visitante.getVisitas());
-        return toVisitanteRequestDTO(visitante);
+    private Visitante getById(final Long id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundException(KeyMessages.VISITANTE_NOT_FOUND.getValue()));
     }
 
-    public VisitanteRequestDTO updateById(Long id, VisitanteRequestDTO visitanteRequestDTO) {
-        try {
-            Visitante buscaVisitante = visitanteRepository.getReferenceById(id);
-            buscaVisitante.setNome(visitanteRequestDTO.getNome());
-            buscaVisitante.setDocumento(visitanteRequestDTO.getDocumento());
-            buscaVisitante.setTelefone(visitanteRequestDTO.getTelefone());
-            buscaVisitante.setVisitas(visitanteRequestDTO.getVisitas());
-            buscaVisitante = visitanteRepository.save(buscaVisitante);
-            return toVisitanteRequestDTO(buscaVisitante);
-        } catch (EntityNotFoundException e) {
-            throw new NotFoundException("Visitante não encontrado.");
+    private void validateIfVisitanteExists(final String documento) {
+        if(nonNull(documento)) {
+            if (repository.findByDocumento(documento).isPresent()) {
+                throw new ConflictException(KeyMessages.DOCUMENT_ALREADY_REGISTERED.getValue());
+            }
         }
     }
 
+    public VisitanteResponseDTO save(VisitanteRequestDTO visitanteRequestDTO) {
+        this.validateIfVisitanteExists(visitanteRequestDTO.documento());
+        final Visitante visitante = VisitanteMapper.toVisitanteEntity(visitanteRequestDTO);
+        final Visitante visitanteSalvo = repository.saveAndFlush(visitante);
+        return VisitanteMapper.toVisitanteResponseDTO(visitanteSalvo);
+    }
+
+    public VisitanteResponseDTO updateById(Long id, VisitanteUpdateRequestDTO visitanteUpdateRequestDTO) {
+        final Visitante buscaVisitante = this.getById(id);
+        this.validateIfVisitanteExists(visitanteUpdateRequestDTO.documento());
+        final Visitante visitanteSalvo = repository.save(VisitanteMapper.
+                toUpdatedVisitanteEntity(visitanteUpdateRequestDTO, buscaVisitante));
+        return VisitanteMapper.toVisitanteResponseDTO(visitanteSalvo);
+    }
+
     public void deleteById(Long id) {
-        visitanteRepository.deleteById(id);
+        repository.deleteById(id);
     }
 
-    private VisitanteRequestDTO toVisitanteRequestDTO(Visitante visitante) {
-        return new VisitanteRequestDTO(
-                visitante.getId(),
-                visitante.getNome(),
-                visitante.getDocumento(),
-                visitante.getTelefone(),
-                visitante.getVisitas()
-        );
-    }
 
-    private Visitante toVisitanteEntity(VisitanteRequestDTO visitanteRequestDTO) {
-        Visitante visitante = new Visitante(
-                visitanteRequestDTO.getNome(),
-                visitanteRequestDTO.getDocumento(),
-                visitanteRequestDTO.getTelefone()
-        );
 
-        visitanteRequestDTO.getVisitas().forEach(visitante::addVisita);
-
-        return visitante;
-    }
 }

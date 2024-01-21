@@ -25,6 +25,17 @@ public class ExceptionHandler {
         return ResponseEntity.status(status).body(this.error);
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(ConflictException.class)
+    public ResponseEntity<StandardError> conflict(ConflictException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        error.setTimestamp(Instant.now());
+        error.setStatus(status.value());
+        error.setError(e.getMessage());
+        error.setMessage(e.getMessage());
+        error.setPath(request.getRequestURI());
+        return ResponseEntity.status(status).body(this.error);
+    }
+
     @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
