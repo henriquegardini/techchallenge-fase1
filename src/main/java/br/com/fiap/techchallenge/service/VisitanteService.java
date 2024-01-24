@@ -2,18 +2,18 @@ package br.com.fiap.techchallenge.service;
 
 import br.com.fiap.techchallenge.dto.visitante.VisitanteRequestDTO;
 import br.com.fiap.techchallenge.dto.visitante.VisitanteResponseDTO;
-import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateRequestDTO;
+import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateDTO;
 import br.com.fiap.techchallenge.entities.Visitante;
 import br.com.fiap.techchallenge.exception.ConflictException;
 import br.com.fiap.techchallenge.exception.KeyMessages;
 import br.com.fiap.techchallenge.exception.NotFoundException;
 import br.com.fiap.techchallenge.mappers.visitante.VisitanteMapper;
 import br.com.fiap.techchallenge.repository.VisitanteRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -39,17 +39,18 @@ public class VisitanteService {
     }
 
     public VisitanteResponseDTO findByDocumento(final String documento) {
-        final Visitante visitante = repository.findByDocumento(documento).orElseThrow(()
-                -> new NotFoundException(KeyMessages.VISITANTE_NOT_FOUND.getValue()));
+        final Visitante visitante = getVisitante(documento);
         return VisitanteMapper.toVisitanteResponseDTO(visitante);
     }
 
-    private Visitante getById(final Long id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException(KeyMessages.VISITANTE_NOT_FOUND.getValue()));
+    private Visitante getVisitante(String documento) {
+        final Visitante visitante = repository.findByDocumento(documento).orElseThrow(()
+                -> new NotFoundException(KeyMessages.VISITANTE_NOT_FOUND.getValue()));
+        return visitante;
     }
 
     private void validateIfVisitanteExists(final String documento) {
-        if(nonNull(documento)) {
+        if (nonNull(documento)) {
             if (repository.findByDocumento(documento).isPresent()) {
                 throw new ConflictException(KeyMessages.DOCUMENT_ALREADY_REGISTERED.getValue());
             }
@@ -63,18 +64,19 @@ public class VisitanteService {
         return VisitanteMapper.toVisitanteResponseDTO(visitanteSalvo);
     }
 
-    public VisitanteResponseDTO updateById(Long id, VisitanteUpdateRequestDTO visitanteUpdateRequestDTO) {
-        final Visitante buscaVisitante = this.getById(id);
-        this.validateIfVisitanteExists(visitanteUpdateRequestDTO.documento());
+    public VisitanteResponseDTO updateByDocumento(String documento, VisitanteUpdateDTO visitanteUpdateDTO) {
+        final Visitante buscaVisitante = repository.findByDocumento(documento).orElseThrow(()
+                -> new NotFoundException(KeyMessages.VISITANTE_NOT_FOUND.getValue()));
+        this.validateIfVisitanteExists(visitanteUpdateDTO.documento());
         final Visitante visitanteSalvo = repository.save(VisitanteMapper.
-                toUpdatedVisitanteEntity(visitanteUpdateRequestDTO, buscaVisitante));
+                toUpdatedVisitanteEntity(visitanteUpdateDTO, buscaVisitante));
         return VisitanteMapper.toVisitanteResponseDTO(visitanteSalvo);
     }
 
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    @Transactional
+    public void deleteByDocumento(String documento) {
+        var visitante = getVisitante(documento);
+        repository.deleteByDocumento(visitante.getDocumento());
     }
-
-
 
 }

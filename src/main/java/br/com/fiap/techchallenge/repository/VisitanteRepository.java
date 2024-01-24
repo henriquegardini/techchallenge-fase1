@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface VisitanteRepository extends JpaRepository<Visitante, Long> {
-
     Optional<Visitante> findByDocumento(String documento);
+    void deleteByDocumento(String documento);
 }

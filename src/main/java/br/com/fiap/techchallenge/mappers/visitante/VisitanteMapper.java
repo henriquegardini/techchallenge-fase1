@@ -2,11 +2,10 @@ package br.com.fiap.techchallenge.mappers.visitante;
 
 import br.com.fiap.techchallenge.dto.visitante.VisitanteRequestDTO;
 import br.com.fiap.techchallenge.dto.visitante.VisitanteResponseDTO;
-import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateRequestDTO;
+import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateDTO;
 import br.com.fiap.techchallenge.entities.Visitante;
 import br.com.fiap.techchallenge.mappers.visita.VisitaMapper;
 
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -16,9 +15,8 @@ public interface VisitanteMapper {
 
     static VisitanteResponseDTO toVisitanteResponseDTO(final Visitante visitante) {
         return new VisitanteResponseDTO(
-                visitante.getId(),
-                visitante.getNome(),
                 visitante.getDocumento(),
+                visitante.getNome(),
                 visitante.getTelefone(),
                 visitante.getVisitas().stream().
                         map(VisitaMapper::toVisitaResponseDTO)
@@ -27,8 +25,8 @@ public interface VisitanteMapper {
 
     static Visitante toVisitanteEntity(final VisitanteRequestDTO visitanteRequestDTO) {
         Visitante visitante = new Visitante(
-                visitanteRequestDTO.nome(),
                 visitanteRequestDTO.documento(),
+                visitanteRequestDTO.nome(),
                 visitanteRequestDTO.telefone()
         );
         visitanteRequestDTO.visitas().forEach(visita ->
@@ -36,7 +34,7 @@ public interface VisitanteMapper {
         return visitante;
     }
 
-    static Visitante toUpdatedVisitanteEntity(final VisitanteUpdateRequestDTO visitanteRequestDTO,
+    static Visitante toUpdatedVisitanteEntity(final VisitanteUpdateDTO visitanteRequestDTO,
                                               final Visitante visitanteToBeUpdated) {
         visitanteToBeUpdated.setNome(
                 isNull(visitanteRequestDTO.nome())
