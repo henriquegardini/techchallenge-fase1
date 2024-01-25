@@ -20,7 +20,7 @@ public class Visita {
     @CreationTimestamp
     private LocalDate inclusao;
     private LocalDate expiracao;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "visitante_id")
     private Visitante visitante;
 
@@ -88,6 +88,10 @@ public class Visita {
     }
 
     public void setVisitante(Visitante visitante) { this.visitante = visitante; }
+
+    public Visitante getVisitante(){
+        return visitante;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

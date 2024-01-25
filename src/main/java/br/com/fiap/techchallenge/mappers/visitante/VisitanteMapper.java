@@ -5,13 +5,13 @@ import br.com.fiap.techchallenge.dto.visitante.VisitanteResponseDTO;
 import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateDTO;
 import br.com.fiap.techchallenge.entities.Visitante;
 import br.com.fiap.techchallenge.mappers.visita.VisitaMapper;
+import br.com.fiap.techchallenge.util.Formatter;
 
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
 public interface VisitanteMapper {
-
 
     static VisitanteResponseDTO toVisitanteResponseDTO(final Visitante visitante) {
         return new VisitanteResponseDTO(

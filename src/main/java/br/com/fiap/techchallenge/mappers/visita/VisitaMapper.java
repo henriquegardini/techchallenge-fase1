@@ -27,7 +27,8 @@ public interface VisitaMapper {
                 visita.getAndar(),
                 visita.getTorre(),
                 visita.getInclusao(),
-                visita.getExpiracao()
+                visita.getExpiracao(),
+                visita.getVisitante().getNome()
         );
     }
 

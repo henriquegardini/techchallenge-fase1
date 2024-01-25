@@ -14,11 +14,13 @@ import br.com.fiap.techchallenge.exception.NotFoundException;
 import br.com.fiap.techchallenge.mappers.visita.VisitaMapper;
 import br.com.fiap.techchallenge.mappers.visitante.VisitanteMapper;
 import br.com.fiap.techchallenge.repository.VisitaRepository;
+import br.com.fiap.techchallenge.repository.VisitanteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,7 +31,10 @@ import static java.util.Objects.nonNull;
 public class VisitaService {
 
     @Autowired
-    public VisitaRepository repository;
+    private VisitaRepository repository;
+
+    @Autowired
+    private VisitanteService visitanteService;
 
     public void saveVisitas(List<Visita> visitas) {
         repository.saveAll(visitas);
@@ -42,17 +47,34 @@ public class VisitaService {
                 .collect(Collectors.toList());
     }
 
-    /*public VisitaResponseDTO findByDocumento(final String documento) {
-        final Optional<Visita> visitas = repository.findByDocumento(documento);
+    public List<VisitaResponseDTO> findByDocumento(final String documento) {
+        List<Visita> visitas = getVisitaByNome(documento);
+        List<VisitaResponseDTO> responseDTOS = new ArrayList<>();
+       for (Visita v : visitas) {
+           responseDTOS.add(VisitaMapper.toVisitaResponseDTO(v));
+       }
+       return responseDTOS;
+    }
+    public VisitaResponseDTO findById(final Long id) {
+        Visita visitas = getVisitaById(id);
         return VisitaMapper.toVisitaResponseDTO(visitas);
     }
 
-    private Visita getVisita(String documento) {
-        final Visita visita = repository.findByDocumento(documento).orElseThrow(()
+    private List<Visita> getVisitaByNome(String documento) {
+       Visitante visitante = visitanteService.getVisitante(documento);
+       List<Visita> visitas = new ArrayList<>();
+      if(!visitante.getVisitas().isEmpty()){
+          for (Visita v : visitante.getVisitas()){
+              visitas.add(v);
+          }
+      }
+        return visitas;
+    }
+    private Visita getVisitaById(Long id) {
+        final Visita visita = repository.findById(id).orElseThrow(()
                 -> new NotFoundException(KeyMessages.VISITA_NOT_FOUND.getValue()));
         return visita;
     }
-
     private void validateIfVisitaExists(final Long id) {
         if (nonNull(id)) {
             if (repository.findById(id).isPresent()) {
@@ -61,25 +83,25 @@ public class VisitaService {
         }
     }
 
-    /*public VisitaResponseDTO save(VisitaRequestDTO visitaRequestDTO) {
-        this.validateIfVisitaExists(visitaRequestDTO.apartamento());
+    public VisitaResponseDTO save(VisitaRequestDTO visitaRequestDTO) {
         final Visita visita = VisitaMapper.toVisitaEntity(visitaRequestDTO);
+        Visitante visitante = visitanteService.getVisitante(visitaRequestDTO.documento());
+        visita.setVisitante(visitante);
         final Visita visitaSalvo = repository.saveAndFlush(visita);
         return VisitaMapper.toVisitaResponseDTO(visitaSalvo);
     }
 
-    /*public VisitaResponseDTO updateByDocumento(Long id, VisitaUpdateDTO visitaUpdateDTO) {
-        final Visita buscaVisita = repository.findById(id).orElseThrow(()
-                -> new NotFoundException(KeyMessages.VISITA_NOT_FOUND.getValue()));
-        this.validateIfVisitaExists(visitaUpdateDTO.apartamento());
+    public VisitaResponseDTO updateByDocumento(Long id, VisitaUpdateDTO visitaUpdateDTO) {
+        final Visita buscaVisita = getVisitaById(id);
         final Visita visitaSalvo = repository.save(VisitaMapper.
                 toUpdatedVisitaEntity(visitaUpdateDTO, buscaVisita));
         return VisitaMapper.toVisitaResponseDTO(visitaSalvo);
     }
 
     @Transactional
-    public void deleteByDocumento(Long id) {
-        repository.deleteById(id);
-    }*/
+    public void deleteById(Long id) {
+        Visita visita = getVisitaById(id);
+        repository.deleteById(visita.getId());
+    }
 
 }

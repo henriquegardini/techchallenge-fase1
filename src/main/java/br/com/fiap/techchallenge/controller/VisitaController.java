@@ -1,10 +1,12 @@
 package br.com.fiap.techchallenge.controller;
 
+import br.com.fiap.techchallenge.dto.visita.VisitaRequestDTO;
 import br.com.fiap.techchallenge.dto.visita.VisitaResponseDTO;
 import br.com.fiap.techchallenge.dto.visita.VisitaUpdateDTO;
 import br.com.fiap.techchallenge.dto.visitante.VisitanteResponseDTO;
 import br.com.fiap.techchallenge.dto.visitante.VisitanteRequestDTO;
 import br.com.fiap.techchallenge.service.VisitaService;
+import br.com.fiap.techchallenge.util.Formatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,11 @@ import java.util.List;
 @RequestMapping("/visitas")
 public class VisitaController {
 
-    /*@Autowired
+    @Autowired
     private VisitaService visitaService;
+
+    @Autowired
+    private Formatter formatter;
 
     @GetMapping
     public ResponseEntity<List<VisitaResponseDTO>> findAll() {
@@ -26,28 +31,29 @@ public class VisitaController {
     }
 
     @GetMapping("/{documento}")
-    public ResponseEntity<VisitaResponseDTO> findByDocumento(@PathVariable String documento) {
-        final VisitaResponseDTO visitaResponseDTO = visitaService.findByDocumento(documento);
+    public ResponseEntity<List<VisitaResponseDTO>> findByDocumento(@PathVariable String documento) {
+        documento = formatter.formatarDocumento(documento);
+        final List<VisitaResponseDTO> visitaResponseDTO = visitaService.findByDocumento(documento);
         return ResponseEntity.ok(visitaResponseDTO);
     }
 
     @PostMapping
-    public ResponseEntity<VisitanteResponseDTO> save(@RequestBody VisitanteRequestDTO visitanteRequestDTO) {
-        VisitanteResponseDTO visitaDto = visitaService.save(visitanteRequestDTO);
+    public ResponseEntity<VisitaResponseDTO> save(@RequestBody VisitaRequestDTO visitaRequestDTO) {
+        VisitaResponseDTO visitaDto = visitaService.save(visitaRequestDTO);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(visitaDto);
     }
 
-    @PutMapping("/{documento}")
-    public ResponseEntity<VisitanteResponseDTO> updateByDocumento(@PathVariable String documento,
-                                                                  @RequestBody VisitaUpdateDTO visitaUpdateDTO) {
-        final VisitanteResponseDTO visitanteResponseDTO = visitaService.updateByDocumento(documento, visitaUpdateDTO);
-        return ResponseEntity.ok(visitanteResponseDTO);
+    @PutMapping("/{id}")
+    public ResponseEntity<VisitaResponseDTO> updateByDocumento(@PathVariable Long id,
+                                                               @RequestBody VisitaUpdateDTO visitaUpdateDTO) {
+        final VisitaResponseDTO visitaResponseDTO = visitaService.updateByDocumento(id, visitaUpdateDTO);
+        return ResponseEntity.ok(visitaResponseDTO);
     }
 
-    @DeleteMapping("/{documento}")
-    public ResponseEntity<Void> deleteByDocumento(@PathVariable String documento) {
-        visitaService.deleteByDocumento(documento);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        visitaService.deleteById(id);
         return ResponseEntity.noContent().build();
-    }*/
+    }
 
 }

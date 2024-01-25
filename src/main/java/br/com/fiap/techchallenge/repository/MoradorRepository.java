@@ -1,14 +1,13 @@
 package br.com.fiap.techchallenge.repository;
 
+import br.com.fiap.techchallenge.entities.Morador;
 import br.com.fiap.techchallenge.entities.Visita;
-import br.com.fiap.techchallenge.entities.Visitante;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Repository
-public interface VisitaRepository extends JpaRepository<Visita, Long> {
-    Optional<Visita> findById(Long id);
+public interface MoradorRepository extends JpaRepository<Morador, Long> {
+    Optional<Morador> findByDocumento(String documento);
 }

@@ -69,7 +69,6 @@ public class Visitante {
         visita.setVisitante(this);
     }
 
-
     public List<Visita> getVisitas() {
         return this.visitas;
     }

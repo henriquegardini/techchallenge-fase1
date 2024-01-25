@@ -7,5 +7,6 @@ public record VisitaResponseDTO(Long id,
                                 Integer andar,
                                 String torre,
                                 LocalDate inclusao,
-                                LocalDate expiracao) {
+                                LocalDate expiracao,
+                                String nome) {
 }
