@@ -8,6 +8,7 @@ import br.com.fiap.techchallenge.entities.Visitante;
 import br.com.fiap.techchallenge.exception.KeyMessages;
 import br.com.fiap.techchallenge.exception.NotFoundException;
 import br.com.fiap.techchallenge.exception.OutdatedException;
+import br.com.fiap.techchallenge.mappers.liberacaoAcesso.LiberacaoAcesso;
 import br.com.fiap.techchallenge.repository.MoradorRepository;
 import br.com.fiap.techchallenge.repository.VisitanteRepository;
 import br.com.fiap.techchallenge.util.Formatter;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -28,78 +30,68 @@ public class LiberacaoAcessoService {
     @Autowired
     private VisitanteRepository visitanteRepository;
 
-    private Formatter formatter = new Formatter();
-    private boolean encontrado = false;
-    private boolean liberado = false;
     private Visita visita;
 
     public LiberacaoAcessoResponseDTO liberar(LiberacaoAcessoRequestDTO liberacaoAcessoResquestDTO) {
 
-        var morador = buscaMorador(liberacaoAcessoResquestDTO);
+        Optional<Morador> morador = buscaMorador(liberacaoAcessoResquestDTO);
         if (morador.isPresent()) {
-            if (morador.get().getAtualizacao().isBefore(LocalDate.now().minusYears(1))) {
-                throw new OutdatedException(KeyMessages.DATE_MORADOR_EXPIRED.getValue());
+            if (verificaMoradorDesatualizado(morador.get())) {
+              return LiberacaoAcesso.toMoradorResponseDTO(morador.get(),KeyMessages.DATE_MORADOR_EXPIRED.getValue());
             }
-            return new LiberacaoAcessoResponseDTO(morador.get().getDocumento(),
-                    morador.get().getNome(),
-                    morador.get().getAtualizacao(),
-                    morador.get().getApartamento(),
-                    morador.get().getAndar(),
-                    morador.get().getTorre());
+            return moradorResponseDTO(morador.get());
         }
-
-        Optional<Visitante> visitante = visitanteRepository.findByDocumento(liberacaoAcessoResquestDTO.documento());
-        if (visitante.isPresent()) {
-            if (buscaVisita(visitante, liberacaoAcessoResquestDTO)) {
-                if (this.liberado) {
-                    return new LiberacaoAcessoResponseDTO(visitante.get().getDocumento(),
-                            visitante.get().getNome(),
-                            this.visita.getExpiracao(),
-                            this.visita.getApartamento(),
-                            this.visita.getAndar(),
-                            this.visita.getTorre());
-                } else if (this.encontrado) {
-                    throw new OutdatedException(KeyMessages.DATE_VISITA_EXPIRED.getValue());
+        else {
+            Optional<Visitante> visitante = visitanteRepository.findByDocumento(liberacaoAcessoResquestDTO.documento());
+            if (visitante.isPresent()) {
+                visita = buscaVisita(visitante.get(), liberacaoAcessoResquestDTO);
+                if (Objects.nonNull(visita)) {
+                    if (verificaValidadeDaVisita(visita)) {
+                         return visitanteResponseDTO(visitante.get());
+                    }
+                    else {
+                        throw new OutdatedException(KeyMessages.DATE_VISITA_EXPIRED.getValue());
+                    }
                 } else {
-                    throw new NotFoundException((KeyMessages.PESSOA_NOT_FOUND.getValue()));
+                    throw new NotFoundException((KeyMessages.VISITA_NOT_FOUND_FOR_VISITANTE.getValue()));
                 }
             } else {
-                throw new NotFoundException((KeyMessages.VISITA_NOT_FOUND.getValue()));
+                throw new NotFoundException(KeyMessages.DOCUMENT_NOT_FOUND_AS_MORADOR_OR_VISITANTE.getValue());
             }
+        }
+    }
+
+    private Visita buscaVisita(Visitante visitante, LiberacaoAcessoRequestDTO liberacaoAcessoResquestDTO) {
+        List<Visita> visitas = visitante.getVisitas();
+        if (!visitas.isEmpty()) {
+            for (Visita v : visitas) {
+                if (v.getApartamento().equals(liberacaoAcessoResquestDTO.apartamento()) && v.getAndar().equals(liberacaoAcessoResquestDTO.andar()) && v.getTorre().equals(liberacaoAcessoResquestDTO.torre())) {
+                    return v;
+                }
+            }
+            throw new NotFoundException((KeyMessages.VISITA_DATA_INCORRECT_FOR_VISITANTE.getValue()));
         }
         return null;
     }
+    private static boolean verificaMoradorDesatualizado(Morador morador) {
+        return morador.getAtualizacao().isBefore(LocalDate.now().minusYears(1));
+    }
+
+    private static boolean verificaValidadeDaVisita(Visita v) {
+        return v.getExpiracao().isAfter(LocalDate.now().minusDays(7));
+    }
 
     private Optional<Morador> buscaMorador(LiberacaoAcessoRequestDTO liberacaoAcessoResquestDTO) {
-        Optional<Morador> morador = moradorRepository.findByApartamento(
-                formatter.formatarDocumento(liberacaoAcessoResquestDTO.documento()),
-                liberacaoAcessoResquestDTO.apartamento(),
-                liberacaoAcessoResquestDTO.andar(),
-                liberacaoAcessoResquestDTO.torre());
+        Optional<Morador> morador = moradorRepository.findByDocumento(liberacaoAcessoResquestDTO.documento());
         return morador;
     }
 
-    private Boolean buscaVisita(Optional<Visitante> visitante, LiberacaoAcessoRequestDTO liberacaoAcessoResquestDTO) {
-        Boolean achouVisita = false;
-        List<Visita> visitas = visitante.get().getVisitas();
-        if (!visitas.isEmpty()) {
-            for (Visita v : visitas) {
-                if (v.getApartamento().equals(liberacaoAcessoResquestDTO.apartamento()) &&
-                        v.getAndar().equals(liberacaoAcessoResquestDTO.andar()) &&
-                        v.getTorre().equals(liberacaoAcessoResquestDTO.torre())) {
-                    this.encontrado = true;
-                    achouVisita = true;
-                    if (v.getExpiracao().isAfter(LocalDate.now().minusDays(7))) {
-                        this.visita = v;
-                        this.liberado = true;
-                        achouVisita = true;
-                    }
-                }
-            }
-        } else {
-            throw new NotFoundException((KeyMessages.VISITANTE_NOT_FOUND.getValue()));
-        }
-        return achouVisita;
+    private LiberacaoAcessoResponseDTO moradorResponseDTO(Morador morador) {
+        return new LiberacaoAcessoResponseDTO(morador.getDocumento(), morador.getNome(), morador.getAtualizacao(), morador.getApartamento(), morador.getAndar(), morador.getTorre(), "");
+    }
+
+    private LiberacaoAcessoResponseDTO visitanteResponseDTO(Visitante visitante) {
+        return new LiberacaoAcessoResponseDTO(visitante.getDocumento(), visitante.getNome(), visita.getExpiracao(), visita.getApartamento(), visita.getAndar(), visita.getTorre(), "");
     }
 
 }

@@ -83,7 +83,6 @@ public class VisitanteService {
         }
         final Visitante buscaVisitante = repository.findByDocumento(documento).orElseThrow(()
                 -> new NotFoundException(KeyMessages.VISITANTE_NOT_FOUND.getValue()));
-        this.validateIfVisitanteExists(visitanteUpdateDTO.documento());
         final Visitante visitanteSalvo = repository.save(VisitanteMapper.
                 toUpdatedVisitanteEntity(visitanteUpdateDTO, buscaVisitante));
         return VisitanteMapper.toVisitanteResponseDTO(visitanteSalvo);

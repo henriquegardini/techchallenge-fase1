@@ -10,5 +10,4 @@ import java.util.Optional;
 @Repository
 public interface MoradorRepository extends JpaRepository<Morador, Long> {
     Optional<Morador> findByDocumento(String documento);
-    Optional<Morador> findByApartamento(String documento, Integer apartamento, Integer andar, String torre);
 }

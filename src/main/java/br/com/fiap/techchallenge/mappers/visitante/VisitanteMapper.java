@@ -41,10 +41,6 @@ public interface VisitanteMapper {
                         ? visitanteToBeUpdated.getNome()
                         : visitanteRequestDTO.nome()
         );
-        visitanteToBeUpdated.setDocumento(
-                isNull(visitanteRequestDTO.documento())
-                        ? visitanteToBeUpdated.getDocumento()
-                        : visitanteRequestDTO.documento());
         visitanteToBeUpdated.setTelefone(
                 isNull(visitanteRequestDTO.telefone())
                         ? visitanteToBeUpdated.getTelefone()
