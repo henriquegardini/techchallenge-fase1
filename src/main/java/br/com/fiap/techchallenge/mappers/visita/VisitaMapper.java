@@ -34,22 +34,7 @@ public interface VisitaMapper {
 
     static Visita toUpdatedVisitaEntity(final VisitaUpdateDTO visitaRequestDTO,
                                         final Visita visitaToBeUpdated) {
-        visitaToBeUpdated.setApartamento(
-                isNull(visitaRequestDTO.apartamento())
-                        ? visitaToBeUpdated.getApartamento()
-                        : visitaRequestDTO.apartamento()
-        );
-        visitaToBeUpdated.setAndar(
-                isNull(visitaRequestDTO.andar())
-                        ? visitaToBeUpdated.getAndar()
-                        : visitaRequestDTO.andar()
-        );
-        visitaToBeUpdated.setTorre(
-                isNull(visitaRequestDTO.torre())
-                        ? visitaToBeUpdated.getTorre()
-                        : visitaRequestDTO.torre()
-        );
-        visitaToBeUpdated.setExpiracao(
+       visitaToBeUpdated.setExpiracao(
                 isNull(visitaRequestDTO.expiracao())
                         ? visitaToBeUpdated.getExpiracao()
                         : visitaRequestDTO.expiracao()
