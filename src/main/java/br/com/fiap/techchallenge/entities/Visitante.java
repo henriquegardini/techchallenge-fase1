@@ -5,25 +5,24 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/* PENDENCIAS
+4- Implementar as políticas e os agregados;
+5- Criar o crud da entidade visitas
+6- Criar as consultas dos moradores.
+*/
 @Entity
 @Table(name = "visitante")
 public class Visitante {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-    private String nome;
     private String documento;
+    private String nome;
     private String telefone;
     @OneToMany(mappedBy = "visitante", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Visita> visitas = new ArrayList<>();
 
     public Visitante() {
 
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getNome() {
@@ -50,18 +49,17 @@ public class Visitante {
         this.telefone = telefone;
     }
 
-    public Visitante(String nome, String documento, String telefone) {
-        this.nome = nome;
+    public Visitante(String documento, String nome, String telefone) {
         this.documento = documento;
+        this.nome = nome;
         this.telefone = telefone;
     }
 
     @Override
     public String toString() {
         return "Visitante{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
                 ", documento='" + documento + '\'' +
+                ", nome='" + nome + '\'' +
                 ", telefone='" + telefone + '\'' +
                 '}';
     }
@@ -70,7 +68,6 @@ public class Visitante {
         this.visitas.add(visita);
         visita.setVisitante(this);
     }
-
 
     public List<Visita> getVisitas() {
         return this.visitas;
