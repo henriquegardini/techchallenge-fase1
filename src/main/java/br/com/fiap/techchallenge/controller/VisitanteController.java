@@ -1,9 +1,10 @@
 package br.com.fiap.techchallenge.controller;
 
-import br.com.fiap.techchallenge.dto.visitante.VisitanteRequestDTO;
 import br.com.fiap.techchallenge.dto.visitante.VisitanteResponseDTO;
-import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateRequestDTO;
+import br.com.fiap.techchallenge.dto.visitante.VisitanteRequestDTO;
+import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateDTO;
 import br.com.fiap.techchallenge.service.VisitanteService;
+import br.com.fiap.techchallenge.util.Formatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,9 @@ public class VisitanteController {
     @Autowired
     private VisitanteService visitanteService;
 
+    @Autowired
+    private Formatter formatter;
+
     @GetMapping
     public ResponseEntity<List<VisitanteResponseDTO>> findAll() {
         final List<VisitanteResponseDTO> visitanteResponseDTO = visitanteService.findAll();
@@ -26,6 +30,7 @@ public class VisitanteController {
 
     @GetMapping("/{documento}")
     public ResponseEntity<VisitanteResponseDTO> findByDocumento(@PathVariable String documento) {
+        documento = formatter.formatarDocumento(documento);
         final VisitanteResponseDTO visitanteResponseDTO = visitanteService.findByDocumento(documento);
         return ResponseEntity.ok(visitanteResponseDTO);
     }
@@ -36,16 +41,18 @@ public class VisitanteController {
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(visitanteDto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<VisitanteResponseDTO> updateById(@PathVariable Long id,
-                                                          @RequestBody VisitanteUpdateRequestDTO visitanteUpdateRequestDTO) {
-        final VisitanteResponseDTO visitanteResponseDTO = visitanteService.updateById(id, visitanteUpdateRequestDTO);
+    @PutMapping("/{documento}")
+    public ResponseEntity<VisitanteResponseDTO> updateByDocumento(@PathVariable String documento,
+                                                                  @RequestBody VisitanteUpdateDTO visitanteUpdateDTO) {
+        documento = formatter.formatarDocumento(documento);
+        final VisitanteResponseDTO visitanteResponseDTO = visitanteService.updateByDocumento(documento, visitanteUpdateDTO);
         return ResponseEntity.ok(visitanteResponseDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        visitanteService.deleteById(id);
+    @DeleteMapping("/{documento}")
+    public ResponseEntity<Void> deleteByDocumento(@PathVariable String documento) {
+        documento = formatter.formatarDocumento(documento);
+        visitanteService.deleteByDocumento(documento);
         return ResponseEntity.noContent().build();
     }
 

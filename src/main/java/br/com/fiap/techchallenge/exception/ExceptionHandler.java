@@ -17,10 +17,14 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(NotFoundException.class)
     public ResponseEntity<StandardError> entityNotFound(NotFoundException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
+        return getStandardErrorResponseEntity(request, status, e.getMessage(), e);
+    }
+
+    private ResponseEntity<StandardError> getStandardErrorResponseEntity(HttpServletRequest request, HttpStatus status, String message, Exception e) {
         error.setTimestamp(Instant.now());
         error.setStatus(status.value());
-        error.setError(e.getMessage());
-        error.setMessage(e.getMessage());
+        error.setError(message);
+        error.setMessage(message);
         error.setPath(request.getRequestURI());
         return ResponseEntity.status(status).body(this.error);
     }
@@ -28,12 +32,7 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(ConflictException.class)
     public ResponseEntity<StandardError> conflict(ConflictException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
-        error.setTimestamp(Instant.now());
-        error.setStatus(status.value());
-        error.setError(e.getMessage());
-        error.setMessage(e.getMessage());
-        error.setPath(request.getRequestURI());
-        return ResponseEntity.status(status).body(this.error);
+        return getStandardErrorResponseEntity(request, status, e.getMessage(), e);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
@@ -52,6 +51,12 @@ public class ExceptionHandler {
         };
 
         return ResponseEntity.status(status).body(validateError);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(OutdatedException.class)
+    public ResponseEntity<StandardError> outdated(OutdatedException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return getStandardErrorResponseEntity(request, status, e.getMessage(), e);
     }
 
 }

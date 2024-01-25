@@ -2,7 +2,12 @@ package br.com.fiap.techchallenge.mappers.visita;
 
 import br.com.fiap.techchallenge.dto.visita.VisitaRequestDTO;
 import br.com.fiap.techchallenge.dto.visita.VisitaResponseDTO;
+import br.com.fiap.techchallenge.dto.visita.VisitaUpdateDTO;
+import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateDTO;
 import br.com.fiap.techchallenge.entities.Visita;
+import br.com.fiap.techchallenge.entities.Visitante;
+
+import static java.util.Objects.isNull;
 
 public interface VisitaMapper {
 
@@ -22,8 +27,19 @@ public interface VisitaMapper {
                 visita.getAndar(),
                 visita.getTorre(),
                 visita.getInclusao(),
-                visita.getExpiracao()
+                visita.getExpiracao(),
+                visita.getVisitante().getNome()
         );
+    }
+
+    static Visita toUpdatedVisitaEntity(final VisitaUpdateDTO visitaRequestDTO,
+                                        final Visita visitaToBeUpdated) {
+       visitaToBeUpdated.setExpiracao(
+                isNull(visitaRequestDTO.expiracao())
+                        ? visitaToBeUpdated.getExpiracao()
+                        : visitaRequestDTO.expiracao()
+        );
+        return visitaToBeUpdated;
     }
 
 }

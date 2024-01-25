@@ -4,11 +4,10 @@ import br.com.fiap.techchallenge.dto.visita.VisitaRequestDTO;
 
 import java.util.List;
 
-public record VisitanteRequestDTO(Long id,
-                                  String nome,
-                                  String documento,
-                                  String telefone,
-                                  List<VisitaRequestDTO> visitas) {
-
-
+public record VisitanteRequestDTO(
+        String documento,
+        String nome,
+        String telefone,
+        List<VisitaRequestDTO> visitas
+) {
 }
