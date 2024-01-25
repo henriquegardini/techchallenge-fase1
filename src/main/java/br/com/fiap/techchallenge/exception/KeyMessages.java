@@ -7,7 +7,7 @@ public enum KeyMessages {
     DATE_MORADOR_EXPIRED("Data de acesso expirada. Favor atualizar com síndico"),
     DATE_VISITA_EXPIRED("Data de acesso expirada. Favor confirmar visita com morador"),
     VISITA_NOT_FOUND_FOR_VISITANTE("Nenhuma visita cadastrada para o visitante. Favor confirmar com morador e cadastrar visita."),
-    DOCUMENT_NOT_FOUND_AS_MORADOR_OR_VISITANTE("Documento não está cadastrado nem como morador nem visitante. Confirmar dados com o responsável."),
+    PESSOA_NOT_FOUND("Pessoal não está cadastrado. Solicite o cadastramento como morador ou visitante."),
     DOCUMENT_ALREADY_REGISTERED("Documento já está registrado.");
 
 
