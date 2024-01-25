@@ -27,9 +27,9 @@ que acessam o prédio.
 
 ### Arquitetura
 A arquitetura do projeto está no padrão MVC
-Versão Java: 17
-Versão SpringBoot: 3.1.2
-Banco de Dados: h2 (Memória)
+- Versão Java: 17
+- Versão SpringBoot: 3.1.2
+- Banco de Dados: h2 (Memória)
 
 ### CURL Postman
 
