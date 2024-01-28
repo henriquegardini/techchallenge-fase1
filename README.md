@@ -23,7 +23,7 @@ do acesso de visitantes.
 ### Como nossa solução resolverá o problema?
 
 A aplicação proporcionará um melhor controle, com o cadastro e informações de visitante(s) e períodos em que
-os mesmos possam acessar o prédio. Atráves de consulta a uma api externa do cadastro de moradores, módulo realizado
+os mesmos possam acessar o prédio. Atráves de consulta a um banco de dados do cadastro de moradores, módulo realizado
 pelo síndico, será disponibilizado um módulo de consulta para que o porteiro possa validar informações de veículos
 que acessam o prédio.
 

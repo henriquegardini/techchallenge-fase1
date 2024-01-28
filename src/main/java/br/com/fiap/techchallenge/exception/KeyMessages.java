@@ -4,6 +4,7 @@ public enum KeyMessages {
     VISITANTE_NOT_FOUND("Visitante não encontrado."),
     VISITA_NOT_FOUND("Visita não encontrada."),
     DOCUMENT_REGISTERED_AS_MORADOR("Documento está registrado como morador."),
+    DOCUMENT_IS_NULL("Documento não deve ser nulo."),
     DATE_MORADOR_EXPIRED("Data de acesso expirada. Favor atualizar cadastro com síndico."),
     DATE_VISITA_EXPIRED("Data de acesso expirada. Favor confirmar visita com morador."),
     VISITA_NOT_FOUND_FOR_VISITANTE("Nenhuma visita cadastrada para o visitante. Favor confirmar com morador e cadastrar visita."),
