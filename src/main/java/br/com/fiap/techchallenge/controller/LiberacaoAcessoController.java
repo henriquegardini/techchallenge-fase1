@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/liberar")
 public class LiberacaoAcessoController {
-    private VisitanteService visitanteService;
 
     @Autowired
     private LiberacaoAcessoService liberacaoAcessoService;

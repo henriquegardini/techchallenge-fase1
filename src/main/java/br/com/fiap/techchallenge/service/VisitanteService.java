@@ -69,6 +69,8 @@ public class VisitanteService {
         final Optional<Morador> morador = moradorRepository.findByDocumento(visitanteRequestDTO.documento());
         if(morador.isPresent()){
             throw new ConflictException(KeyMessages.DOCUMENT_REGISTERED_AS_MORADOR.getValue());
+        }else if(visitanteRequestDTO.documento().isEmpty()){
+            throw new ConflictException(KeyMessages.DOCUMENT_IS_NULL.getValue());
         }
         this.validateIfVisitanteExists(visitanteRequestDTO.documento());
         final Visitante visitante = VisitanteMapper.toVisitanteEntity(visitanteRequestDTO);

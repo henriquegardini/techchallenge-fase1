@@ -11,12 +11,10 @@ import br.com.fiap.techchallenge.exception.OutdatedException;
 import br.com.fiap.techchallenge.mappers.liberacaoAcesso.LiberacaoAcesso;
 import br.com.fiap.techchallenge.repository.MoradorRepository;
 import br.com.fiap.techchallenge.repository.VisitanteRepository;
-import br.com.fiap.techchallenge.util.Formatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

@@ -3,18 +3,14 @@ package br.com.fiap.techchallenge.service;
 import br.com.fiap.techchallenge.dto.visita.VisitaRequestDTO;
 import br.com.fiap.techchallenge.dto.visita.VisitaResponseDTO;
 import br.com.fiap.techchallenge.dto.visita.VisitaUpdateDTO;
-import br.com.fiap.techchallenge.dto.visitante.VisitanteResponseDTO;
-import br.com.fiap.techchallenge.dto.visitante.VisitanteRequestDTO;
-import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateDTO;
 import br.com.fiap.techchallenge.entities.Visita;
 import br.com.fiap.techchallenge.entities.Visitante;
 import br.com.fiap.techchallenge.exception.ConflictException;
 import br.com.fiap.techchallenge.exception.KeyMessages;
 import br.com.fiap.techchallenge.exception.NotFoundException;
+import br.com.fiap.techchallenge.exception.OutdatedException;
 import br.com.fiap.techchallenge.mappers.visita.VisitaMapper;
-import br.com.fiap.techchallenge.mappers.visitante.VisitanteMapper;
 import br.com.fiap.techchallenge.repository.VisitaRepository;
-import br.com.fiap.techchallenge.repository.VisitanteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -85,14 +80,22 @@ public class VisitaService {
 
     public VisitaResponseDTO save(VisitaRequestDTO visitaRequestDTO) {
         final Visita visita = VisitaMapper.toVisitaEntity(visitaRequestDTO);
+        verificaSeVisitaEFutura(visitaRequestDTO.expiracao());
         Visitante visitante = visitanteService.getVisitante(visitaRequestDTO.documento());
         visita.setVisitante(visitante);
         final Visita visitaSalvo = repository.saveAndFlush(visita);
         return VisitaMapper.toVisitaResponseDTO(visitaSalvo);
     }
 
+    private void verificaSeVisitaEFutura(LocalDate localDate) {
+        if(localDate.isBefore(LocalDate.now())){
+            throw new OutdatedException(KeyMessages.DATE_VISITA_IN_THE_PAST.getValue());
+        }
+    }
+
     public VisitaResponseDTO updateByDocumento(Long id, VisitaUpdateDTO visitaUpdateDTO) {
         final Visita buscaVisita = getVisitaById(id);
+        verificaSeVisitaEFutura(visitaUpdateDTO.expiracao());
         final Visita visitaSalvo = repository.save(VisitaMapper.
                 toUpdatedVisitaEntity(visitaUpdateDTO, buscaVisita));
         return VisitaMapper.toVisitaResponseDTO(visitaSalvo);
