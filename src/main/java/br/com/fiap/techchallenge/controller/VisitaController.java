@@ -3,8 +3,6 @@ package br.com.fiap.techchallenge.controller;
 import br.com.fiap.techchallenge.dto.visita.VisitaRequestDTO;
 import br.com.fiap.techchallenge.dto.visita.VisitaResponseDTO;
 import br.com.fiap.techchallenge.dto.visita.VisitaUpdateDTO;
-import br.com.fiap.techchallenge.dto.visitante.VisitanteResponseDTO;
-import br.com.fiap.techchallenge.dto.visitante.VisitanteRequestDTO;
 import br.com.fiap.techchallenge.service.VisitaService;
 import br.com.fiap.techchallenge.util.Formatter;
 import org.springframework.beans.factory.annotation.Autowired;

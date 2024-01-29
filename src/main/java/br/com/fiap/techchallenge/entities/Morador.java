@@ -19,13 +19,9 @@ public class Morador {
     private LocalDate inclusao;
     private LocalDate atualizacao;
 
-    // Construtores, getters e setters aqui
-
-    // Exemplo de construtor padrão
     public Morador() {
     }
 
-    // Exemplo de construtor com todos os atributos
     public Morador(String nome, String documento, String email, String telefone, Integer apartamento, Integer andar, String torre, LocalDate inclusao, LocalDate atualizacao) {
         this.nome = nome;
         this.documento = documento;
@@ -38,7 +34,6 @@ public class Morador {
         this.atualizacao = atualizacao;
     }
 
-    // Exemplo de getters e setters
     public String getNome() {
         return nome;
     }

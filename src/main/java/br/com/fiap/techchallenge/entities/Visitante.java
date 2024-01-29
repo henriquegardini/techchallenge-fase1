@@ -7,19 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-/* PENDENCIAS
-Ponto 1: Validar se faz sentido atualizar todos os campos do visitante.
-	Sugestão: faz sentido atualizar os campos nome e telefone.
-
-Ponto 2: Validar se faz sentido atualizar todos os campos das visitas.
-	Sugestão: faz sentido a chave de atualização ser documento, apartamento, andar e torre e faz sentido atualizar apenas o campo expiração.
-
-Ponto 3: Quando for cadastrado a visita para o apartamento errado, como deve ser tratado o cadastro do apartamento certo.
-	Sugestão: Atualizar o registro do apartamento errado com os dados do apartamento certo.
-
-Ponto 4: Ficou estranho não informar o apartamento da solicitação de acesso.
-	Sugestão: Na liberação de acesso, incluir os campo apartamento, andar e torre além do documento.
-*/
 @Entity
 @Table(name = "visitante")
 public class Visitante {

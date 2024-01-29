@@ -3,9 +3,7 @@ package br.com.fiap.techchallenge.mappers.visita;
 import br.com.fiap.techchallenge.dto.visita.VisitaRequestDTO;
 import br.com.fiap.techchallenge.dto.visita.VisitaResponseDTO;
 import br.com.fiap.techchallenge.dto.visita.VisitaUpdateDTO;
-import br.com.fiap.techchallenge.dto.visitante.VisitanteUpdateDTO;
 import br.com.fiap.techchallenge.entities.Visita;
-import br.com.fiap.techchallenge.entities.Visitante;
 
 import static java.util.Objects.isNull;
 
